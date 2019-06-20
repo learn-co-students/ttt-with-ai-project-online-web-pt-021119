@@ -1,3 +1,11 @@
 #!/usr/bin/env ruby
 
+
+
 require_relative '../config/environment'
+
+
+puts "Want to play against a human?"
+ans=gets.chomp
+
+ans=='y' ? Game.new.play : Game.new(Players::Computer.new("X")).play
