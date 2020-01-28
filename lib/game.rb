@@ -9,6 +9,11 @@ class Game
   end
 
   def current_player
-
+    turn = @board.turn_count
+    if turn % 2 = 0
+      @player_1
+    else
+      @player_2
+    end
   end
 end
