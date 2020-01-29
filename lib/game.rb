@@ -10,10 +10,54 @@ class Game
 
   def current_player
     turn = @board.turn_count
-    if turn % 2 = 0
-      @player_1
-    else
-      @player_2
+    turn % 2 == 0 ? @player_1 : @player_2
+  end
+
+  def won?
+    WIN_COMBINATIONS.detect do |combo|
+      @board.cells[combo[0]] == @board.cells[combo[1]] &&
+      @board.cells[combo[1]] == @board.cells[combo[2]] && @board.taken?(combo[0]+1)
     end
+  end
+
+  def draw?
+     @board.full? && !won?
+  end
+
+  def over?
+    won? || draw?
+  end
+
+  def winner
+    if winning_combo = won?
+      @winner = @board.cells[winning_combo.first]
+    end
+  end
+
+  def turn
+    player = self.current_player
+    player_move = player.move(@board)
+    if !@board.valid_move?(player_move)
+      turn
+    else
+      puts "Turn: #{@board.turn_count+1}\n"
+      @board.display
+      @board.update(player_move, player)
+      puts "#{player.token} moved #{player_move}"
+      @board.display
+      puts "\n\n"
+    end
+  end
+
+  def play
+    while !over?
+      turn
+    end
+    if won?
+    puts "Congratulations #{winner}!"
+    elsif draw?
+      puts "Cat's Game!"
+    end
+
   end
 end
